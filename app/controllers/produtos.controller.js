@@ -2,6 +2,8 @@ var multer = require('multer');
 // var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 // var xhr = new XMLHttpRequest();
 
+var Produto = require('../models/produtos.model.js');
+
 let nomeImagem = [];
 
 var produtos = [
@@ -96,11 +98,30 @@ module.exports.inserirProduto = function(req, res){
     //          res.json({error_code:0,err_desc:null});
     // });
     // req.body.imagem.push(nomeImagem);
-    req.body.imagem = nomeImagem;
-    console.log(req.body);
-    produtos.push(req.body);
-    res.status(201).send(req.body);
+    // let promise = 
+    // req.body.imagem = nomeImagem;
+    // console.log(req.body);
+    // produtos.push(req.body);
     // nomeImagem = [];
+    // res.status(201).send(req.body);
+    // res.sendStatus(201);
+    let produto = new Produto({
+    nome: req.body.nome,
+    descricao: req.body.descricao,
+    preco: req.body.preco,
+    dimensoes: req.body.dimensoes,
+    categoria: req.body.categoria,
+    estoque: req.body.estoque,
+  });
+  let promise = Produto.create(produto);
+  promise.then(
+    function(produto){
+      res.status(201).json(produto);
+    },
+    function(erro){
+      res.status(500).json(erro)
+    }
+  );
     
 };
 
