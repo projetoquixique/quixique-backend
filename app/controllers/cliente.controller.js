@@ -70,5 +70,4 @@ module.exports.inserirCliente = function(req,res){
             });
         });
     });
-
-    };
+};

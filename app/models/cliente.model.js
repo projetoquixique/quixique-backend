@@ -4,8 +4,7 @@ module.exports = function() {
   var schema = mongoose.Schema({
     id: {
       type: String,
-      required: false,
-      unique: true
+      required: false
     },
     nome: {
       type: String,
