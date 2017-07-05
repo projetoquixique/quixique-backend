@@ -168,3 +168,57 @@ module.exports.uploadProduto = function(req, res){
     // console.log("requisição:" + req.body);
 }
 
+module.exports.obterProduto = function(req, res) {
+    let promise = Produto.findOne({_id:req.params.id});
+    promise.then(
+        function(produto){
+            if (produto){
+                res.status(200).json({
+                    title: produto.nome,
+                    price: produto.preco,
+                    units: produto.estoque,
+                    size: produto.dimensoes,
+                    materials: produto.categoria,
+                    description: produto.descricao
+                })
+                //materiais não é o mesmo que categoria (ver página detalhe_produto)
+                //obter comentários, bio do autor e link do perfil - INSERIR ID DO ARTESAO E COMENTARIOS
+            } else {
+                res.status(404).send("Not found");
+            }
+        },
+        function(erro){
+            res.status(500).json(erro);
+        }
+    )
+};
+
+module.exports.listarProdutosPorCategoria = function(req, res) {
+    let promise = Produto.find({categoria:req.params.categoria});
+    promise.then(
+        function(produtos){
+            res.status(200).json(produtos);
+        }, 
+        function(erro){
+            res.status(500).json(erro);
+        }
+    )
+}
+
+module.exports.buscarProdutosPorNome = function(req, res) {
+    // Produto.find({$text: {$search: req.query.termo}})
+    //         // .skip(20)
+    //         // .limit(10)
+    //         .exec(function(err, docs){
+    //             res.status(200).json(docs);
+    //         });
+    let promise = Produto.find({$text: {$search: req.query.termo}}).exec();
+    promise.then(
+        function(produtos){
+            res.status(200).json(produtos);
+        },
+        function(erro){
+            res.status(500).json(erro);
+        }
+    )
+}

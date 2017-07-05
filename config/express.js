@@ -1,6 +1,5 @@
 var express = require('express');
-var clienteRoutes = require('../app/routes/cliente.routes.js');
-var artesaoRoutes = require('../app/routes/artesao.routes.js');
+var usuarioRoutes = require('../app/routes/usuario.routes.js');
 var produtosRoutes = require('../app/routes/produtos.routes.js');
 var bodyParser = require('body-parser');
 // var multer = require('multer');
@@ -58,8 +57,7 @@ module.exports = function(){
     app.use(express.static('../public/'));
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({extended:false}));
-    clienteRoutes(app);
-    artesaoRoutes(app);
+    usuarioRoutes(app);
     produtosRoutes(app);
     app.get('*', (req, res) => {
         res.sendfile(path.join(__dirname, '../public/'));

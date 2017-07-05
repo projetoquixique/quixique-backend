@@ -6,6 +6,11 @@ module.exports = function() {
       type: String,
       required: false
     },
+    tipo: {
+      type: String,
+      default: "artesao",
+      required: true
+    },
     nome: {
       type: String,
       required: true
@@ -99,5 +104,5 @@ module.exports = function() {
       required: false
     }
   });
-  return mongoose.model('Artesao', schema);
+  return mongoose.model('Artesao', schema, 'usuarios');
 }();

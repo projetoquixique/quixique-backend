@@ -10,22 +10,23 @@ module.exports = function() {
 			type: String,
 			required: true
 		},
-        preco: {
+    preco: {
 			type: Number,
 			required: true
 		},
-        dimensoes: {
+    dimensoes: {
 			type: [Number],
 			required: true
 		},
-        categoria: {
+    categoria: {
 			type: String,
 			required: true
 		},
-        estoque: {
+    estoque: {
 			type: Number,
 			required: true
 		}
 	});
+	schema.index({nome: 'text', descricao:'text'});
 	return mongoose.model('Produto', schema);
 }();
