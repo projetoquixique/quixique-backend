@@ -4,7 +4,8 @@ var multer = require('multer');
 
 var Produto = require('../models/produtos.model.js');
 
-let nomeImagem = [];
+let nomeImagem = [];                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+module.exports.nomeImagemVetor = nomeImagem;     
 
 var produtos = [
     //   {
@@ -64,48 +65,34 @@ var produtos = [
 ];
 
 module.exports.listarProdutos = function(req, res){
-    res.json(produtos);
+    // res.json(produtos);
+    let promise = Produto.find().exec();
+    promise.then(
+        function(produto){
+        res.json(produto)
+        },
+        function(erro){
+        res.status(500).end();
+        }
+    );
 };
 
+module.exports.removerProduto = function(req, res){
+    let promise = Produto.findByIdAndRemove(req.params.id);
+    promise.then(
+        function(produto){
+        res.status(200).json(produto);
+        },
+        function(erro){
+        res.status(500).json(erro);
+        }
+    )
+}
+
 module.exports.inserirProduto = function(req, res){
-
-    // xhr.open('POST', 'http://localhost:4200/loja_artesao_view', true);
-    // xhr.withCredentials = true;
-    // xhr.send(null);
-
-
-    // var storage = multer.diskStorage({ //multers disk storage settings
-    //     destination: function (req, file, cb) {
-    //         cb(null, './uploads/');
-    //     },
-    //     filename: function (req, file, cb) {
-    //         var datetimestamp = Date.now();
-    //         cb(null, file.fieldname + '-' + datetimestamp + '.' + file.originalname.split('.')[file.originalname.split('.').length -1]);
-    //     }
-    // });
-
-    // var upload = multer({ //multer settings
-    //                 storage: storage
-    //             }).single('file');
-
-    
-    // upload(req,res,function(err){
-	// 		console.log(req.file);
-    //         if(err){
-    //              res.json({error_code:1,err_desc:err});
-    //              return;
-    //         }
-    //          res.json({error_code:0,err_desc:null});
-    // });
-    // req.body.imagem.push(nomeImagem);
-    // let promise = 
-    // req.body.imagem = nomeImagem;
-    // console.log(req.body);
-    // produtos.push(req.body);
-    // nomeImagem = [];
-    // res.status(201).send(req.body);
-    // res.sendStatus(201);
-    let produto = new Produto({
+  let produto = new Produto({
+    // imagem: this.nomeImagem,
+    imagem: nomeImagem,
     nome: req.body.nome,
     descricao: req.body.descricao,
     preco: req.body.preco,
@@ -113,10 +100,12 @@ module.exports.inserirProduto = function(req, res){
     categoria: req.body.categoria,
     estoque: req.body.estoque,
   });
+  console.log("produto");
   let promise = Produto.create(produto);
   promise.then(
     function(produto){
       res.status(201).json(produto);
+      nomeImagem = [];
     },
     function(erro){
       res.status(500).json(erro)
@@ -125,11 +114,35 @@ module.exports.inserirProduto = function(req, res){
     
 };
 
-var storage = multer.diskStorage({ //multers disk storage settings
+// function inserirProduto(req, res){
+//     let produto = new Produto({
+//     // imagem: this.nomeImagem,
+//     imagem: nomeImagem,
+//     nome: req.body.nome,
+//     descricao: req.body.descricao,
+//     preco: req.body.preco,
+//     dimensoes: req.body.dimensoes,
+//     categoria: req.body.categoria,
+//     estoque: req.body.estoque,
+//   });
+//     console.log(produto);
+//   let promise = Produto.create(produto);
+//   promise.then(
+//     function(produto){
+//       res.status(201).json(produto);
+//       nomeImagem = [];
+//     },
+//     function(erro){
+//       res.status(500).json(erro)
+//     }
+//   );
+// }
+
+var storage = multer.diskStorage({ 
         destination: function (req, file, cb) {
-            cb(null, '../quixique/src/assets/uploads/imagens-produtos');
-            // cb(null, '../../../quixique/');
+            // cb(null, '../quixique/src/assets/uploads/imagens-produtos');
             // cb(null, './uploads/');
+            cb(null, './assets/imagens-produtos');
         },
         filename: function (req, file, cb) {
             var datetimestamp = Date.now();
@@ -137,35 +150,22 @@ var storage = multer.diskStorage({ //multers disk storage settings
         }
     });
 
-// var upload = multer({ //multer settings
-//                 storage: storage
-//             }).single('file');
  var upload = multer({ storage:storage }).single('file');
 
 
 
 module.exports.uploadProduto = function(req, res){
-    // req.body.imagem = storage.filename;
-    // produtos.push(req.body);
     upload(req,res,function(err){
-        // console.log(req.body);
-        console.log(req.file.filename);
-        console.log(req.file);
-        nomeImagem.push(req.file.filename);
-        console.log(nomeImagem);
-        // console.log(req.body.imagem);
-        // console.log(req.body.nome);
-        // console.log(req.body);
-        // req.body.imagem.push(req.file.filename);
-        // console.log(req.body.imagem);
-        // if(err){
-        //     res.json({error_code:1,err_desc:err});
-        //     return;
-        // }
-        // res.json({error_code:0,err_desc:null});
-        // res.status(201).send(req.body);
+			console.log(req.file);
+      nomeImagem.push(req.file.filename);
+            if(err){
+                 res.json({error_code:1,err_desc:err});
+                 return;
+            }
+            // inserirProduto(req, res);
+            // next();
+             res.json({error_code:0,err_desc:null});
     });
-    // console.log("requisição:" + req.body);
 }
 
 module.exports.obterProduto = function(req, res) {
