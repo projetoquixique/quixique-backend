@@ -4,22 +4,26 @@ var jwt = require('jsonwebtoken');
 
 module.exports.logar = function(req, res) {
   function logar(user){
-    if (!bcrypt.compareSync(req.body.senha, user.senha)) {
+    if (!user) {
       falhar();
     } else {
-      let token = jwt.sign({id: user._id}, 'segredo');
-      userObj = user.toObject();
-      res.status(200).json({
-        tipo: userObj.tipo,
-        nome: userObj.nome,
-        nomeDeUsuario: userObj.nomeDeUsuario,
-        token: token,
-        userId: userObj._id
-      });
-    }
-  };
+      if (!bcrypt.compareSync(req.body.senha, user.senha)) {
+        falhar();
+      } else {
+        let token = jwt.sign({id: user._id}, 'segredo');
+        userObj = user.toObject();
+        res.status(200).json({
+          tipo: userObj.tipo,
+          nomeApresentacao: userObj.nomeApresentacao,
+          nomeDeUsuario: userObj.nomeDeUsuario,
+          token: token,
+          userId: userObj._id
+        });
+      }
+    };
+  }
   function falhar() {
-    res.status(401).send({erro: 'login inválido'});
+    res.status(401).json({erro: 'invalid login'});
   };
 
   Usuario.findOne({email: req.body.email}).exec().then(logar, falhar);

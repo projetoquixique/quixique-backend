@@ -8,6 +8,7 @@ var Produto = require('../models/produtos.model.js');
 module.exports.inserirCliente = function(req,res){
     let cliente = new Cliente({
         nome: req.body.nome,
+        nomeApresentacao: req.body.nome.replace(/(([^\s]+\s\s*){2})(.*)/,"$1"),
         dataDeNascimento: req.body.dataDeNascimento,
         cpf: req.body.cpf,
         email: req.body.email,
@@ -60,6 +61,7 @@ module.exports.inserirCliente = function(req,res){
 module.exports.inserirArtesao = function(req,res){
     let artesao = new Artesao({
         nome: req.body.nome,
+        nomeApresentacao: req.body.nome.replace(/(([^\s]+\s\s*){2})(.*)/,"$1"),
         dataDeNascimento: req.body.dataDeNascimento,
         cpf: req.body.cpf,
         naturalidade: req.body.naturalidade,
@@ -124,7 +126,7 @@ module.exports.obterPerfilArtesao = function(req, res){
         function(artesao){
             if (artesao && artesao.tipo == 'artesao') {
                 res.status(200).json({
-                    nome: artesao.nome,
+                    nomeApresentacao: artesao.nomeApresentacao,
                     localizacao: artesao.cidade + ", " + artesao.estado,
                     bio: artesao.bio,
                     apresentacao: artesao.apresentacao,
@@ -143,6 +145,10 @@ module.exports.obterPerfilArtesao = function(req, res){
             res.status(500).json(erro);
         }
     );
+};
+
+module.exports.atualizarPerfilArtesao = function(req, res){
+    console.log(req.body);
 };
 
 module.exports.obterProdutosLojaArtesao = function(req, res){

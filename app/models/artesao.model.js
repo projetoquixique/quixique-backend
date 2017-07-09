@@ -15,6 +15,10 @@ module.exports = function() {
       type: String,
       required: true
     },
+    nomeApresentacao: {
+      type: String,
+      required: false
+    },
     dataDeNascimento: {
       type: String,
       required: true
