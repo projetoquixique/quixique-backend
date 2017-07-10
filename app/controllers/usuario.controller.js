@@ -8,6 +8,7 @@ var Produto = require('../models/produtos.model.js');
 module.exports.inserirCliente = function(req,res){
     let cliente = new Cliente({
         nome: req.body.nome,
+        nomeApresentacao: req.body.nome.replace(/(([^\s]+\s\s*){2})(.*)/,"$1"),
         dataDeNascimento: req.body.dataDeNascimento,
         cpf: req.body.cpf,
         email: req.body.email,
@@ -60,6 +61,7 @@ module.exports.inserirCliente = function(req,res){
 module.exports.inserirArtesao = function(req,res){
     let artesao = new Artesao({
         nome: req.body.nome,
+        nomeApresentacao: req.body.nome.replace(/(([^\s]+\s\s*){2})(.*)/,"$1"),
         dataDeNascimento: req.body.dataDeNascimento,
         cpf: req.body.cpf,
         naturalidade: req.body.naturalidade,
@@ -124,7 +126,7 @@ module.exports.obterPerfilArtesao = function(req, res){
         function(artesao){
             if (artesao && artesao.tipo == 'artesao') {
                 res.status(200).json({
-                    nome: artesao.nome,
+                    nomeApresentacao: artesao.nomeApresentacao,
                     localizacao: artesao.cidade + ", " + artesao.estado,
                     bio: artesao.bio,
                     apresentacao: artesao.apresentacao,
@@ -143,6 +145,30 @@ module.exports.obterPerfilArtesao = function(req, res){
             res.status(500).json(erro);
         }
     );
+};
+
+module.exports.atualizarPerfilArtesao = function(req, res){
+    let infoAtualizada = {
+        nomeApresentacao: req.body.nomeApresentacao,
+        localizacao: req.body.localizacao,
+        bio: req.body.bio,
+        apresentacao: req.body.apresentacao,
+        historia: req.body.historia,
+        telefone: req.body.telefone,
+        email: req.body.email,
+        urlFacebook: req.body.urlFacebook,
+        urlInstagram: req.body.urlInstagram
+    }
+    Artesao.findOneAndUpdate({nomeDeUsuario: req.params.username}, infoAtualizada, { upsert: true }, function (err, artesao) {
+        if (artesao){
+            console.log(artesao)
+            res.status(200).send("Ok");
+        }
+        if (err){
+            console.log(err);
+            res.status(500).send(err);
+        }
+    });
 };
 
 module.exports.obterProdutosLojaArtesao = function(req, res){
