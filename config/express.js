@@ -1,6 +1,7 @@
 var express = require('express');
 var usuarioRoutes = require('../app/routes/usuario.routes.js');
 var produtosRoutes = require('../app/routes/produtos.routes.js');
+var pedidosRoutes = require('../app/routes/pedidos.routes.js');
 var bodyParser = require('body-parser');
 // var multer = require('multer');
 const path = require('path');
@@ -47,6 +48,7 @@ module.exports = function(){
     app.use(bodyParser.urlencoded({extended:false}));
     usuarioRoutes(app);
     produtosRoutes(app);
+    pedidosRoutes(app);
     app.get('*', (req, res) => {
         res.sendfile(path.join(__dirname, '../public/index.html'));
     });

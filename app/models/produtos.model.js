@@ -6,6 +6,11 @@ module.exports = function() {
 			type: [String],
 			required: false
 		},
+		aid: {
+			type: mongoose.Schema.ObjectId,
+			ref: 'Artesao',
+			required: true
+		},
 		nome: {
 			type: String,
 			required: true
