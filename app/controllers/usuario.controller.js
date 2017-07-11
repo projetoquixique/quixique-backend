@@ -1,5 +1,7 @@
 var bcrypt = require('bcrypt');
 var mailer = require('../../config/nodemailer.js');
+var multer = require('multer');
+
 
 var Artesao = require('../models/artesao.model.js');
 var Cliente = require('../models/cliente.model.js');
@@ -126,6 +128,7 @@ module.exports.obterPerfilArtesao = function(req, res){
         function(artesao){
             if (artesao && artesao.tipo == 'artesao') {
                 res.status(200).json({
+                    fotoPerfil: artesao.fotoPerfil,
                     nomeApresentacao: artesao.nomeApresentacao,
                     localizacao: artesao.cidade + ", " + artesao.estado,
                     bio: artesao.bio,
@@ -150,6 +153,7 @@ module.exports.obterPerfilArtesao = function(req, res){
 module.exports.atualizarPerfilArtesao = function(req, res){
     let infoAtualizada = {
         nomeApresentacao: req.body.nomeApresentacao,
+        fotoPerfil: fotoPerfilNome,
         localizacao: req.body.localizacao,
         bio: req.body.bio,
         apresentacao: req.body.apresentacao,
@@ -161,7 +165,8 @@ module.exports.atualizarPerfilArtesao = function(req, res){
     }
     Artesao.findOneAndUpdate({nomeDeUsuario: req.params.username}, infoAtualizada, { upsert: true }, function (err, artesao) {
         if (artesao){
-            console.log(artesao)
+            console.log(artesao);
+            fotoPerfilNome = "";
             res.status(200).send("Ok");
         }
         if (err){
@@ -183,4 +188,34 @@ module.exports.obterProdutosLojaArtesao = function(req, res){
             res.status(500).json(erro);
         }
     )
+}
+
+var storage = multer.diskStorage({ 
+        destination: function (req, file, cb) {
+            // cb(null, '../quixique/src/assets/uploads/imagens-produtos');
+            // cb(null, './uploads/');
+            cb(null, './assets/imagens-perfis');
+        },
+        filename: function (req, file, cb) {
+            var datetimestamp = Date.now();
+            cb(null, file.fieldname + '-' + datetimestamp + '.' + file.originalname.split('.')[file.originalname.split('.').length -1]);
+        }
+    });
+
+ var upload = multer({ storage:storage }).single('file');
+
+let fotoPerfilNome;
+
+module.exports.uploadFotoPerfil = function(req, res){
+    upload(req,res,function(err){
+			console.log(req.file);
+      fotoPerfilNome = req.file.filename;
+            if(err){
+                 res.json({error_code:1,err_desc:err});
+                 return;
+            }
+            // inserirProduto(req, res);
+            // next();
+             res.json({error_code:0,err_desc:null});
+    });
 }
