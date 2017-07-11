@@ -41,8 +41,8 @@ module.exports = function(){
 
     app.set('port', 3000);
     app.use(bodyParser.json());
-    app.use(express.static('./public'));
     app.use(express.static('./assets'));
+    app.use(express.static('./public'));
     // app.use(express.static('../public/assets/imagens-produtos/'));
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({extended:false}));
