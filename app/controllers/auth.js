@@ -17,7 +17,8 @@ module.exports.logar = function(req, res) {
           nomeApresentacao: userObj.nomeApresentacao,
           nomeDeUsuario: userObj.nomeDeUsuario,
           token: token,
-          userId: userObj._id
+          userId: userObj._id,
+          fotoPerfil: userObj.fotoPerfil
         });
       }
     };

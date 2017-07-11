@@ -2,7 +2,6 @@ var bcrypt = require('bcrypt');
 var mailer = require('../../config/nodemailer.js');
 var multer = require('multer');
 
-
 var Artesao = require('../models/artesao.model.js');
 var Cliente = require('../models/cliente.model.js');
 var Produto = require('../models/produtos.model.js');
