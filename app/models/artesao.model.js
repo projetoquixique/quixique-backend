@@ -6,6 +6,10 @@ module.exports = function() {
       type: String,
       required: false
     },
+    fotoPerfil: {
+      type: String,
+      required: false
+    },
     tipo: {
       type: String,
       default: "artesao",
@@ -14,6 +18,10 @@ module.exports = function() {
     nome: {
       type: String,
       required: true
+    },
+    nomeApresentacao: {
+      type: String,
+      required: false
     },
     dataDeNascimento: {
       type: String,
@@ -100,6 +108,26 @@ module.exports = function() {
       required: true
     },
     linkPaginaWeb: {
+      type: String,
+      required: false
+    },
+    bio: {
+      type: String,
+      required: false
+    },
+    apresentacao: {
+      type: String,
+      required: false
+    },
+    historia: {
+      type: String,
+      required: false
+    },
+    urlFacebook: {
+      type: String,
+      required: false
+    },
+    urlInstagram: {
       type: String,
       required: false
     }

@@ -1,6 +1,7 @@
 var express = require('express');
 var usuarioRoutes = require('../app/routes/usuario.routes.js');
 var produtosRoutes = require('../app/routes/produtos.routes.js');
+var pedidosRoutes = require('../app/routes/pedidos.routes.js');
 var bodyParser = require('body-parser');
 // var multer = require('multer');
 const path = require('path');
@@ -40,13 +41,14 @@ module.exports = function(){
 
     app.set('port', 3000);
     app.use(bodyParser.json());
-    app.use(express.static('./public'));
     app.use(express.static('./assets'));
+    app.use(express.static('./public'));
     // app.use(express.static('../public/assets/imagens-produtos/'));
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({extended:false}));
     usuarioRoutes(app);
     produtosRoutes(app);
+    pedidosRoutes(app);
     app.get('*', (req, res) => {
         res.sendfile(path.join(__dirname, '../public/index.html'));
     });

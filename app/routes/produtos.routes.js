@@ -23,19 +23,13 @@ module.exports = function(app){
     app.get("/api/produtos/busca", controller.buscarProdutosPorNome);
     app.get("/api/produtos/categoria/:categoria", controller.listarProdutosPorCategoria);
 
+    app.get("/api/produtos/:aid", controller.getProdutosArtesao);
+
     //IMPLEMENTAR CHECAGEM DE TOKEN
     app.delete("/api/produtos/:id", controller.removerProduto);
     // app.post("/api/produtos/upload", controller.uploadProduto);
     app.post("/api/produtos/upload", controller.uploadProduto);
-    // app.use("/api/produtos/insert", function(){
-    //     upload(req,res,function(err){
-    //         // console.log(req.file.filename);
-    //         console.log(req.body);
-    //         console.log(controller.nomeImagemVetor);
-    //         res.json({error_code:0,err_desc:null});
-    //         // controller.nomeImagemVetor.push(req.file.filename);
-    //     });
-    //     next()
-    // });
     app.post("/api/produtos", controller.inserirProduto);
+    app.put("/api/produtos/:id", controller.editarProduto);
+    app.delete("/api/produtos/:id", controller.deletarProduto);
 }

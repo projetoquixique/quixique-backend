@@ -91,7 +91,7 @@ module.exports.removerProduto = function(req, res){
 
 module.exports.inserirProduto = function(req, res){
   let produto = new Produto({
-    // imagem: this.nomeImagem,
+    aid: req.body.artesao_id,
     imagem: nomeImagem,
     nome: req.body.nome,
     descricao: req.body.descricao,
@@ -106,37 +106,24 @@ module.exports.inserirProduto = function(req, res){
     function(produto){
       res.status(201).json(produto);
       nomeImagem = [];
+      console.log(nomeImagem);
     },
     function(erro){
       res.status(500).json(erro)
     }
   );
+
+//   let promise2 = Produto.find().exec();
+//     promise2.then(
+//         function(produto2){
+//         res.json(produto2)
+//         },
+//         function(erro){
+//         res.status(500).end();
+//         }
+//     );
     
 };
-
-// function inserirProduto(req, res){
-//     let produto = new Produto({
-//     // imagem: this.nomeImagem,
-//     imagem: nomeImagem,
-//     nome: req.body.nome,
-//     descricao: req.body.descricao,
-//     preco: req.body.preco,
-//     dimensoes: req.body.dimensoes,
-//     categoria: req.body.categoria,
-//     estoque: req.body.estoque,
-//   });
-//     console.log(produto);
-//   let promise = Produto.create(produto);
-//   promise.then(
-//     function(produto){
-//       res.status(201).json(produto);
-//       nomeImagem = [];
-//     },
-//     function(erro){
-//       res.status(500).json(erro)
-//     }
-//   );
-// }
 
 var storage = multer.diskStorage({ 
         destination: function (req, file, cb) {
@@ -219,6 +206,74 @@ module.exports.buscarProdutosPorNome = function(req, res) {
         },
         function(erro){
             res.status(500).json(erro);
+        }
+    )
+}
+
+
+module.exports.editarProduto = function(req, res){
+    let produto = {
+        // imagem: this.nomeImagem,
+        aid: req.body.artesao_id,
+        imagem: req.body.imagem,
+        nome: req.body.nome,
+        descricao: req.body.descricao,
+        preco: req.body.preco,
+        dimensoes: req.body.dimensoes,
+        categoria: req.body.categoria,
+        estoque: req.body.estoque,
+    };
+    let id = req.params.id;
+    console.log("entrou" + id);
+
+    console.log(produto.imagem);
+
+    // let promise = Produto.update(Produto.findById(id), req.body);
+    // let promise = Produto.update({'_id':id},produto,{ new: true });
+
+    let promise = Produto.findOneAndUpdate({'_id':req.params.id}, produto).exec();
+    promise.then(
+        function(produto){
+            res.status(200).json(produto);
+        },
+        function(erro){
+            res.status(500).json(erro);
+        }
+    )
+
+
+    // promise.then(
+    //     function(produto){
+    //         console.log(json(produto));
+    //         res.status(200).json(produto);
+    //     },
+    //     function(erro){
+    //         res.status(500).json(erro);
+    //     }
+    // )
+}
+
+module.exports.getProdutosArtesao = function(req, res){
+    let produto = Produto.find({aid:req.params.aid}).exec();
+    produto.then(
+        function(produto){
+            console.log(produto);
+            res.status(200).json(produto);
+        },
+        function(erro){
+            console.log(erro);
+        }
+    )
+}
+
+module.exports.deletarProduto = function(req, res){
+    let promise = Produto.findByIdAndRemove(req.params.id).exec();
+    promise.then(
+        function(produto){
+            res.status(200).json(produto)
+        },
+        function(erro){
+            res.status(500).json(erro)
         }
     )
 }

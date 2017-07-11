@@ -6,6 +6,10 @@ module.exports = function() {
       type: String,
       required: false
     },
+    fotoPerfil: {
+      type: String,
+      required: false
+    },
     tipo: {
       type: String,
       default: "cliente",
@@ -14,6 +18,10 @@ module.exports = function() {
     nome: {
       type: String,
       required: true
+    },
+    nomeApresentacao: {
+      type: String,
+      required: false
     },
     dataDeNascimento: {
       type: String,
