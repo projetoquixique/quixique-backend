@@ -31,4 +31,5 @@ module.exports = function(app){
     app.post("/api/produtos/upload", controller.uploadProduto);
     app.post("/api/produtos", controller.inserirProduto);
     app.put("/api/produtos/:id", controller.editarProduto);
+    app.delete("/api/produtos/:id", controller.deletarProduto);
 }

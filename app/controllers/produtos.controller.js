@@ -212,29 +212,45 @@ module.exports.buscarProdutosPorNome = function(req, res) {
 
 
 module.exports.editarProduto = function(req, res){
-    let produto = new Produto({
+    let produto = {
         // imagem: this.nomeImagem,
-        imagem: nomeImagem,
+        aid: req.body.artesao_id,
+        imagem: req.body.imagem,
         nome: req.body.nome,
         descricao: req.body.descricao,
         preco: req.body.preco,
         dimensoes: req.body.dimensoes,
         categoria: req.body.categoria,
         estoque: req.body.estoque,
-    });
+    };
     let id = req.params.id;
+    console.log("entrou" + id);
 
+    console.log(produto.imagem);
 
-    let promise = Produto.update(Produto.findById(id), req.body);
+    // let promise = Produto.update(Produto.findById(id), req.body);
+    // let promise = Produto.update({'_id':id},produto,{ new: true });
+
+    let promise = Produto.findOneAndUpdate({'_id':req.params.id}, produto).exec();
     promise.then(
         function(produto){
-            console.log("entro");
             res.status(200).json(produto);
         },
         function(erro){
             res.status(500).json(erro);
         }
     )
+
+
+    // promise.then(
+    //     function(produto){
+    //         console.log(json(produto));
+    //         res.status(200).json(produto);
+    //     },
+    //     function(erro){
+    //         res.status(500).json(erro);
+    //     }
+    // )
 }
 
 module.exports.getProdutosArtesao = function(req, res){
@@ -246,6 +262,18 @@ module.exports.getProdutosArtesao = function(req, res){
         },
         function(erro){
             console.log(erro);
+        }
+    )
+}
+
+module.exports.deletarProduto = function(req, res){
+    let promise = Produto.findByIdAndRemove(req.params.id).exec();
+    promise.then(
+        function(produto){
+            res.status(200).json(produto)
+        },
+        function(erro){
+            res.status(500).json(erro)
         }
     )
 }
