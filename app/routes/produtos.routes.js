@@ -21,7 +21,7 @@ module.exports = function(app){
     app.get("/api/produto/:id", controller.obterProduto);
     app.get("/api/produtos", controller.listarProdutos);
     app.get("/api/produtos/busca", controller.buscarProdutosPorNome);
-    app.get("/api/produtos/categoria/:categoria", controller.listarProdutosPorCategoria);
+    app.get("/api/produtos/categoria", controller.listarProdutosPorCategoria);
 
     app.get("/api/produtos/:aid", controller.getProdutosArtesao);
 

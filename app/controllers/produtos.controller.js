@@ -166,7 +166,8 @@ module.exports.obterProduto = function(req, res) {
                     units: produto.estoque,
                     size: produto.dimensoes,
                     materials: produto.categoria,
-                    description: produto.descricao
+                    description: produto.descricao,
+                    imagem: produto.imagem
                 })
                 //materiais não é o mesmo que categoria (ver página detalhe_produto)
                 //obter comentários, bio do autor e link do perfil - INSERIR ID DO ARTESAO E COMENTARIOS
@@ -181,7 +182,8 @@ module.exports.obterProduto = function(req, res) {
 };
 
 module.exports.listarProdutosPorCategoria = function(req, res) {
-    let promise = Produto.find({categoria:req.params.categoria});
+    // let promise = Produto.find({$text: {$search: req.query.categoria}});;
+    let promise = Produto.find({'categoria':{ "$regex": req.query.categoria, "$options": "i" }});
     promise.then(
         function(produtos){
             res.status(200).json(produtos);
