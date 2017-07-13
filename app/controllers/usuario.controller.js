@@ -153,11 +153,18 @@ module.exports.obterBioArtesao = function(req, res){
     let promise = Artesao.findOne({_id:req.params.aid});
     promise.then(
         function(artesao){
-            historiaCurta = artesao.historia.substring(0,120) + '...';
+            if (artesao.historia !== null) {
+                historiaCurta = artesao.historia.substring(0,120) + '...';
+            } else {
+                historiaCurta = artesao.nomeApresentacao;
+            }
+            
             res.status(200).json({
                 historia: historiaCurta,
                 nomeDeUsuario: artesao.nomeDeUsuario
             });
+        }, function (error) {
+            res.status(500).json(error)
         }
     );
 }
