@@ -218,3 +218,50 @@ module.exports.uploadFotoPerfil = function(req, res){
              res.json({error_code:0,err_desc:null});
     });
 }
+
+module.exports.obterPerfilCliente = function(req, res){
+    console.log(req.params.id);
+    let promise = Cliente.findById(req.params.id).exec();
+    promise.then(
+        function(cliente){
+            res.status(200).json(cliente);
+        },
+        function(erro){
+            res.status(500).json(erro)
+        }
+    )
+}
+
+module.exports.editarPerfilCliente = function(req, res){
+    console.log(req.params.id);  
+    let cliente = {
+        nome: req.body.nome,
+        nomeApresentacao: req.body.nome.replace(/(([^\s]+\s\s*){2})(.*)/,"$1"),
+        dataDeNascimento: req.body.dataDeNascimento,
+        cpf: req.body.cpf,
+        email: req.body.email,
+        celular: req.body.celular,
+        cep: req.body.cep,
+        logradouro: req.body.logradouro,
+        numero: req.body.numero,
+        complemento: req.body.complemento,
+        bairro: req.body.bairro,
+        cidade: req.body.cidade,
+        estado: req.body.estado,
+        nomeDeUsuario: req.body.nomeDeUsuario,
+        senha: bcrypt.hashSync(req.body.senha, 10)
+    };
+
+    let promise = Cliente.findOneAndUpdate({'_id':req.params.id}, cliente).exec();
+    // let promise = Cliente.findByIdAndUpdate(req.params.id, cliente).exec();
+    // let promise = Cliente.update(Cliente.find({'_id':req.params.id}), cliente).exec();
+    promise.then(
+        function(clienteEditado){
+            res.status(200).json(clienteEditado)
+        },
+        function(erro){
+            res.status(500).json(erro)
+        }
+    )
+
+}
