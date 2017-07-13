@@ -149,6 +149,19 @@ module.exports.obterPerfilArtesao = function(req, res){
     );
 };
 
+module.exports.obterBioArtesao = function(req, res){
+    let promise = Artesao.findOne({_id:req.params.aid});
+    promise.then(
+        function(artesao){
+            historiaCurta = artesao.historia.substring(0,120) + '...';
+            res.status(200).json({
+                historia: historiaCurta,
+                nomeDeUsuario: artesao.nomeDeUsuario
+            });
+        }
+    );
+}
+
 module.exports.atualizarPerfilArtesao = function(req, res){
     let infoAtualizada = {
         nomeApresentacao: req.body.nomeApresentacao,
@@ -180,14 +193,28 @@ module.exports.obterProdutosLojaArtesao = function(req, res){
     // .skip(20)
     // .limit(10)
     promise.then(
-        function(produtos) {
+        function(produtos){
             res.status(200).json(produtos);
         },
         function(erro){
             res.status(500).json(erro);
         }
     )
-}
+};
+
+// module.exports.obterProdutosPerfilArtesao = function(req, res){
+//     let promise = Produto.find({aid:req.params.aid});
+//     res.stat
+//     // promise.then(
+//     //     function(produtos){
+//     //         res.status(200).json(produtos);
+//     //     },
+//     //     function(erro){
+//     //         res.status(500).json(erro);
+//     //     }
+
+//     // )
+// }
 
 var storage = multer.diskStorage({ 
         destination: function (req, file, cb) {
