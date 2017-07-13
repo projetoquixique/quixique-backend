@@ -156,7 +156,8 @@ module.exports.obterBioArtesao = function(req, res){
             historiaCurta = artesao.historia.substring(0,120) + '...';
             res.status(200).json({
                 historia: historiaCurta,
-                nomeDeUsuario: artesao.nomeDeUsuario
+                nomeDeUsuario: artesao.nomeDeUsuario,
+                imagemPerfil: artesao.fotoPerfil
             });
         }
     );
