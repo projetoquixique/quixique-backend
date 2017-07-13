@@ -5,7 +5,8 @@ module.exports = function(app){
     app.post('/api/clientes', controllerUsuario.inserirCliente);
     app.post('/api/artesaos', controllerUsuario.inserirArtesao);
     app.post('/api/entrar', controllerAuth.logar);
-    app.post("/api/perfil/upload", controllerUsuario.uploadFotoPerfil);
+    app.post('/api/perfil/upload', controllerUsuario.uploadFotoPerfil);
+    app.get('/api/artesao/:aid/bio', controllerUsuario.obterBioArtesao);
     app.get('/api/artesao/:username', controllerUsuario.obterPerfilArtesao);
     app.get('/api/artesao/:username/loja', controllerUsuario.obterProdutosLojaArtesao);
     app.put('/api/artesao/:username/atualizarperfil', controllerUsuario.atualizarPerfilArtesao);

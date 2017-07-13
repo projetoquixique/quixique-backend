@@ -167,13 +167,27 @@ module.exports.obterProduto = function(req, res) {
                     size: produto.dimensoes,
                     materials: produto.categoria,
                     description: produto.descricao,
-                    imagem: produto.imagem
+                    imagem: produto.imagem,
+                    category: produto.categoria,
+                    aid: produto.aid
                 })
                 //materiais não é o mesmo que categoria (ver página detalhe_produto)
                 //obter comentários, bio do autor e link do perfil - INSERIR ID DO ARTESAO E COMENTARIOS
             } else {
                 res.status(404).send("Not found");
             }
+        },
+        function(erro){
+            res.status(500).json(erro);
+        }
+    )
+};
+
+module.exports.obterRecomendacoesCategoria = function(req, res){
+    let promise = Produto.find({'categoria':{ "$regex": req.params.categoria, "$options": "i" }}).limit(4);
+    promise.then(
+        function(produtos){
+            res.status(200).json(produtos);
         },
         function(erro){
             res.status(500).json(erro);
@@ -242,8 +256,6 @@ module.exports.editarProduto = function(req, res){
             res.status(500).json(erro);
         }
     )
-
-
     // promise.then(
     //     function(produto){
     //         console.log(json(produto));
@@ -255,6 +267,7 @@ module.exports.editarProduto = function(req, res){
     // )
 }
 
+//limit
 module.exports.getProdutosArtesao = function(req, res){
     let produto = Produto.find({aid:req.params.aid}).exec();
     produto.then(
@@ -264,6 +277,19 @@ module.exports.getProdutosArtesao = function(req, res){
         },
         function(erro){
             console.log(erro);
+            res.status(500).json(erro);
+        }
+    )
+}
+
+module.exports.obterRecomendacoesProdutoArtesao = function(req, res){
+    let promise = Produto.find({aid:req.params.aid}).limit(4).exec();
+    promise.then(
+        function(produtos){
+            res.status(200).json(produtos);
+        },
+        function(erro){
+            res.status(500).json(erro);
         }
     )
 }
